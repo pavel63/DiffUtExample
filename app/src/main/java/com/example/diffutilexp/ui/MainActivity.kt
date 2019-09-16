@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.diffutilexp.adapters.ProductAdapter
+import com.example.diffutilexp.data.EqualDataGenerator.returnEqualProductList
 import com.example.diffutilexp.data.ProductGenerator.generateMockDataProductList
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -16,8 +17,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.example.diffutilexp.R.layout.activity_main)
 
-        button ?.setOnClickListener {
-            onUpdateClick()
+        activity_main_add_diff_btn ?.setOnClickListener {
+            addDiffDataClick()
+        }
+
+        activity_main_add_eq_btn ?.setOnClickListener {
+            addEqDataClick()
         }
 
         initAdapter()
@@ -27,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun initAdapter(){
-        productAdapter = ProductAdapter(generateMockDataProductList(5))
+        productAdapter = ProductAdapter()
 
         with(activity_main_rv){
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -38,8 +43,15 @@ class MainActivity : AppCompatActivity() {
 
 
 
-   private fun onUpdateClick() {
+   private fun addDiffDataClick() {
        productAdapter.updateProductListItems(generateMockDataProductList(5))
    }
+
+
+
+    private fun addEqDataClick(){
+        productAdapter.updateProductListItems(returnEqualProductList())
+
+    }
 
 }

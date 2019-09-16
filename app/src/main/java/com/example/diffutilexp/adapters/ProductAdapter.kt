@@ -11,7 +11,9 @@ import com.example.diffutilexp.utils.ProductDiffUtilCallback
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.row_product_list.view.*
 
-class ProductAdapter(private var mProductList : ArrayList<Product>) : RecyclerView.Adapter<ProductAdapter.ProductAdapterViewHolder>() {
+class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductAdapterViewHolder>() {
+
+    private var mProductList = mutableListOf<Product>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductAdapterViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.row_product_list,parent,false)
@@ -34,8 +36,9 @@ class ProductAdapter(private var mProductList : ArrayList<Product>) : RecyclerVi
             ProductDiffUtilCallback(this.mProductList, prodList)
         val productDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback)
 
-        this.mProductList.clear()
+     //   this.mProductList.clear()
         this.mProductList .addAll(prodList)
+
         productDiffResult .dispatchUpdatesTo(this)
     }
 
