@@ -7,13 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.diffutilexp.R
 import com.example.diffutilexp.models.Product
-import com.example.diffutilexp.utils.ProductDiffUtilCallback
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.row_product_list.view.*
 
 class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductAdapterViewHolder>() {
 
-    private var mProductList = mutableListOf<Product>()
+    var items : List<Product> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductAdapterViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.row_product_list,parent,false)
@@ -21,27 +20,43 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductAdapterViewHol
     }
 
 
-    override fun getItemCount() = mProductList.size
+    override fun getItemCount() = items.size
 
 
 
     override fun onBindViewHolder(holder: ProductAdapterViewHolder, position: Int) {
-        holder.bind(mProductList[position])
+        holder.bind(items[position])
     }
 
 
-    fun updateProductListItems(prodList : List<Product>){
+    fun updateProductListItems(prodList : ArrayList<Product>) {
 
-        val productDiffUtilCallback =
+        val diffutObj = object : DiffUtil.Callback() {
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                items[oldItemPosition].id == items[newItemPosition].id
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                items[oldItemPosition].hashCode() == items[newItemPosition].hashCode()
+
+            override fun getOldListSize() = items.size
+
+            override fun getNewListSize() = prodList.size
+        }
+
+        val diffResult = DiffUtil.calculateDiff(diffutObj)
+        items = prodList
+        diffResult.dispatchUpdatesTo(this)
+
+            /* val productDiffUtilCallback =
             ProductDiffUtilCallback(this.mProductList, prodList)
         val productDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback)
 
      //   this.mProductList.clear()
         this.mProductList .addAll(prodList)
 
-        productDiffResult .dispatchUpdatesTo(this)
-    }
+        productDiffResult .dispatchUpdatesTo(this)*/
 
+    }
 
 
 
