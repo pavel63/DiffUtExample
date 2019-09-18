@@ -2,4 +2,5 @@
     <string name="app_name">DiffUtilExp</string>
     <string name="add_new_portion_of_items">Add new portion of items</string>
     <string name="add_equals_data">Add equals data</string>
+    <string name="search">Поиск</string>
 </resources>

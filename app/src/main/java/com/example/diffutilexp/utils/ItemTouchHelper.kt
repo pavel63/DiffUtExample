@@ -1,14 +1,19 @@
 package com.example.diffutilexp.utils
 
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RectF
 import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.diffutilexp.adapters.ProductAdapter
 import com.example.diffutilexp.models.Product
+import android.R.attr.bottom
+import android.R.attr.right
+import android.R.attr.top
+import android.R.attr.left
+import android.R
+import android.graphics.*
+import android.graphics.drawable.Drawable
+
+
 
 class ItemTouchHelperFAdapt(
     val adapter: ProductAdapter,
@@ -19,7 +24,9 @@ class ItemTouchHelperFAdapt(
     var bgRect = RectF()
     var bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-    var itemBounds = RectF()
+    var paintBlue = Paint()
+
+    var iconBounds = Rect()
 
     override fun getMovementFlags(
         recyclerView: RecyclerView,
@@ -58,7 +65,9 @@ class ItemTouchHelperFAdapt(
         val itemView = viewHolder.itemView
 
         // drawIcon(c, itemView, dX)
+       // drawIcon(c, itemView, dY)
         drawBackground(c, itemView, dY)
+
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 
@@ -77,9 +86,31 @@ class ItemTouchHelperFAdapt(
         }
 
      canvas.drawRect(bgRect, bgPaint)
+
     }
 
     private fun drawIcon(canvas: Canvas, itemView: View, dx: Float) {
+        val icon = itemView.resources.getDrawable(R.drawable.ic_btn_speak_now)
+        val iconSize = itemView.resources.getDimensionPixelSize(R.dimen.app_icon_size)
+        val space = itemView.resources.getDimensionPixelSize(R.dimen.app_icon_size)
+        val margin = (itemView.bottom - itemView.top-iconSize)/2
 
+        with(bgRect){
+            left=itemView.right + dx + space
+            top = itemView .top + margin .toFloat()
+            right = itemView.right+dx.toInt() + iconSize + space .toFloat()
+            bottom = itemView.bottom - margin .toFloat()
+        }
+
+        icon .bounds = iconBounds
+        icon .draw(canvas)
+
+     /* val bitmap = BitmapFactory.decodeResource(itemView.resources, R.drawable.ic_btn_speak_now)
+        val rect1 = Rect()
+        val rect2 = Rect()
+
+        paintBlue.color = Color.BLUE
+
+        canvas.drawBitmap(bitmap,rect1,rect2,paintBlue) */
     }
 }
